@@ -1,3 +1,5 @@
+const VIDEO_API_ENDPOINT = "https://maya-mongo-api.adaptable.app/crud"
+
 // Global variable to store the selected cartoon style
 let currentStyle = "mickey-mouse"
 
@@ -74,19 +76,6 @@ async function sleep(timeInMilliSeconds) {
 	return new Promise((resolve) => setTimeout(resolve, timeInMilliSeconds))
 }
 
-let assets = [
-	{
-		thumbnail: "thumbnail1.jpg",
-		title: "Helping out dad",
-		duration: "2m",
-	},
-	{
-		thumbnail: "thumbnail2.webp",
-		title: "Under the Ocean",
-		duration: "1m",
-	},
-]
-
 function constructThumbnail(asset) {
 	let thumbnail = document.createElement("div")
 	thumbnail.classList.add("thumbnail")
@@ -101,7 +90,7 @@ function constructThumbnail(asset) {
 
 	let thumbnailContentTitle = document.createElement("span")
 	thumbnailContentTitle.classList.add("thumbnail-content-title")
-	thumbnailContentTitle.innerHTML = asset.title
+	thumbnailContentTitle.innerHTML = asset.episodeTitle
 	thumbnailContent.appendChild(thumbnailContentTitle)
 
 	let thumbnailContentDuration = document.createElement("span")
@@ -126,10 +115,13 @@ function constructThumbnails(assets) {
 	return thumbnails
 }
 
-setTimeout(() => {
+setTimeout(async () => {
+
+	let response = await fetch(`${VIDEO_API_ENDPOINT}/all`)
+	let assets = await response.json()
+
 	let thumbnails = constructThumbnails(assets)
 	let rightColumn = document.getElementById("right-column")
-	// in that remove the div with class loader
 	rightColumn.removeChild(rightColumn.querySelector(".loader"))
 	rightColumn.appendChild(thumbnails)
-}, 500)
+})
