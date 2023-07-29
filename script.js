@@ -50,7 +50,11 @@ function simulateLoading() {
 
 	stopLoading = () => {
 		// Remove loader
-		document.getElementById("generate-button").removeChild(loader)
+		try {
+			document.getElementById("generate-button").removeChild(loader)
+		} catch (error) {
+			console.log(error)
+		}
 
 		// Enable the button again
 		document.getElementById("generate-button").classList.remove("disabled")
@@ -133,3 +137,17 @@ setTimeout(() => {
 	rightColumn.removeChild(rightColumn.querySelector(".loader"))
 	rightColumn.appendChild(thumbnails)
 }, 500)
+
+document.getElementById("generate-button").addEventListener("click", async () => {
+    simulateLoading()
+	await sleep(4000)
+	const videoDiv = document.getElementById("generated-video")
+	const video = videoDiv.querySelector("video")
+	video.src = "sample.mp4"
+	video.play()
+	stopLoading()
+});
+
+async function sleep(timeInMilliSeconds) {
+	return new Promise(resolve => setTimeout(resolve, timeInMilliSeconds));
+}
