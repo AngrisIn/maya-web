@@ -57,8 +57,79 @@ function simulateLoading() {
 	}
 }
 
-
 // Add click event listener to the "Generate Video" button
-document.getElementById("generate-button").addEventListener("click", () => {
-    simulateLoading();
-});
+document
+	.getElementById("generate-button")
+	.addEventListener("click", async () => {
+		simulateLoading()
+		await sleep(5000)
+		const videoDiv = document.getElementById("generated-video")
+		const video = videoDiv.querySelector("video")
+		video.src = "sample.mp4"
+		video.play()
+		stopLoading()
+	})
+
+async function sleep(timeInMilliSeconds) {
+	return new Promise((resolve) => setTimeout(resolve, timeInMilliSeconds))
+}
+
+let assets = [
+	{
+		thumbnail: "thumbnail1.jpg",
+		title: "Helping out dad",
+		duration: "2m",
+	},
+	{
+		thumbnail: "thumbnail2.webp",
+		title: "Under the Ocean",
+		duration: "1m",
+	},
+]
+
+function constructThumbnail(asset) {
+	let thumbnail = document.createElement("div")
+	thumbnail.classList.add("thumbnail")
+
+	let img = document.createElement("img")
+	img.src = asset.thumbnail
+	img.alt = "Video Thumbnail"
+	thumbnail.appendChild(img)
+
+	let thumbnailContent = document.createElement("div")
+	thumbnailContent.classList.add("thumbnail-content")
+
+	let thumbnailContentTitle = document.createElement("span")
+	thumbnailContentTitle.classList.add("thumbnail-content-title")
+	thumbnailContentTitle.innerHTML = asset.title
+	thumbnailContent.appendChild(thumbnailContentTitle)
+
+	let thumbnailContentDuration = document.createElement("span")
+	thumbnailContentDuration.classList.add("thumbnail-content-duration")
+	thumbnailContentDuration.innerHTML = asset.duration
+	thumbnailContent.appendChild(thumbnailContentDuration)
+
+	thumbnail.appendChild(thumbnailContent)
+
+	return thumbnail
+}
+
+function constructThumbnails(assets) {
+	let thumbnails = document.createElement("div")
+	thumbnails.classList.add("thumbnails")
+
+	assets.forEach((asset) => {
+		let thumbnail = constructThumbnail(asset)
+		thumbnails.appendChild(thumbnail)
+	})
+
+	return thumbnails
+}
+
+setTimeout(() => {
+	let thumbnails = constructThumbnails(assets)
+	let rightColumn = document.getElementById("right-column")
+	// in that remove the div with class loader
+	rightColumn.removeChild(rightColumn.querySelector(".loader"))
+	rightColumn.appendChild(thumbnails)
+}, 500)

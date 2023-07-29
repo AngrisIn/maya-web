@@ -276,6 +276,14 @@ label {
     margin-left: 10px;
 }
 
+.loaderBig {
+	height: 30px;
+    border: 8px solid #ffffff4d;
+    width: 30px;
+    border-top: 8px solid #1A237E;
+    margin: 12px auto;
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
