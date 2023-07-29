@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartoon Video Generator</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>CreateMyCartoon</h1>
+    </header>
+    <main>
+        <div id="left-column">
+			<label for="cartoon-style-buttons">Select a cartoon style:</label>
+            <div id="cartoon-style-buttons">
+                <button aria-label="buttons" class="cartoon-style-button mickey-mouse" data-style="mickey-mouse"></button>
+                <button aria-label="buttons" class="cartoon-style-button spongebob" data-style="spongebob"></button>
+            </div>
+			<label for="user-prompt">Enter the value you want your kids to learn:</label>
+            <div class="prompt-container">
+                <input type="text" id="user-prompt" placeholder="Enter the value you want your kids to learn" rows="2" />
+				<button id="generate-button">Generate Cartoon</button>
+            </div>
+            <div id="generated-video">
+                <video id="video" controls>
+					<source src="video.mp4" type="video/mp4">
+				</video>
+            </div>
+        </div>
+        <div id="right-column">
+            <h2>Check these out!</h2>
+            <div class="thumbnail">
+                <img src="thumbnail1.jpg" alt="Video Thumbnail">
+				<div class="thumbnail-content">
+					<span class="thumbnail-content-title">Helping out dad</span>
+					<span class="thumbnail-content-duration">2m</span>
+				</div>
+            </div>
+            <div class="thumbnail">
+				<img src="thumbnail2.webp" alt="Video Thumbnail">
+                <div class="thumbnail-content">
+					<span class="thumbnail-content-title">Under the Ocean</span>
+					<span class="thumbnail-content-duration">1m</span>
+				</div>
+            </div>
+            <!-- Add more video thumbnails here -->
+        </div>
+    </main>
+	<!-- Your existing HTML code -->
+
+	<!-- Add the following script tag to include the JavaScript code -->
+	<script src="script.js" defer></script>
+
+</body>
+</html>
