@@ -102,9 +102,10 @@ document
 	.getElementById("generate-button")
 	.addEventListener("click", async () => {
 		simulateLoading()
-		
+
 		const prompt = document.getElementById("user-prompt").value
-		const { videoURL, thumbnailURL, title, description } = await generateVideo(currentStyle, prompt)
+		const { videoURL, thumbnailURL, title, description } =
+			await generateVideo(currentStyle, prompt)
 
 		const videoDiv = document.getElementById("generated-video")
 		const video = videoDiv.querySelector("video")
@@ -121,7 +122,6 @@ async function sleep(timeInMilliSeconds) {
 	return new Promise((resolve) => setTimeout(resolve, timeInMilliSeconds))
 }
 
-
 function setTitleAndDescription(title, description) {
 	document.querySelector(".videoTitle").innerHTML = title
 	document.querySelector(".videoDescription").innerHTML = description
@@ -132,7 +132,8 @@ function constructThumbnail(asset) {
 	thumbnail.classList.add("thumbnail")
 
 	let img = document.createElement("img")
-	img.src = `${VIDEO_GENERATION_ENDPOINT}/files/${asset.uuid}_0.png`
+	img.src = `${VIDEO_GENERATION_ENDPOINT}/${asset.uuid}_0.png`
+	img.classList.add("thumbnail-image")
 	img.alt = asset.episodeTitle
 	thumbnail.appendChild(img)
 
@@ -176,10 +177,21 @@ setTimeout(async () => {
 	rightColumn.appendChild(thumbnails)
 })
 
-document.addEventListener("click:", (event) => {
-	// if it came from a thumbnail, title, duration, or description or thumbnail image or its children do something
-	if (event.target.classList.contains("thumbnail") || event.target.classList.contains("thumbnail-content") || event.target.classList.contains("thumbnail-content-title") || event.target.classList.contains("thumbnail-content-duration") || event.target.classList == "thumbnail-content" || event.target.classList == "thumbnail-content-title" || event.target.classList == "thumbnail-content-duration" || event.target.classList == "thumbnail-content" || event.target.classList == "thumbnail-content-title" || event.target.classList == "thumbnail-content-duration" || event.target.classList == "thumbnail-content" || event.target.classList == "thumbnail-content-title" || event.target.classList == "thumbnail-content-duration" || event.target.classList == "thumbnail-content" || event.target.classList == "thumbnail-content-title" || event.target.classList == "thumbnail-content-duration") {
-		let videoURL = event.target.querySelector("img").src.replace("_0.png", ".mp4")
+document.addEventListener("click", (event) => {
+	if (
+		event.target.classList.contains("thumbnail-content-duration") ||
+		event.target.classList.contains("thumbnail-content-title") ||
+		event.target.classList.contains("thumbnail-content") ||
+		event.target.classList == "thumbnail-image" 
+	) {
+
+		let thumbnail = event.target
+		while (!thumbnail.classList.contains("thumbnail")) {
+			thumbnail = thumbnail.parentNode
+		}
+
+		let img = thumbnail.querySelector(".thumbnail-image")
+		let videoURL = img.src.replace("_0.png", ".mp4")
 		window.open(videoURL, "_blank")
 	}
 })
