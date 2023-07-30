@@ -138,16 +138,24 @@ setTimeout(() => {
 	rightColumn.appendChild(thumbnails)
 }, 500)
 
-document.getElementById("generate-button").addEventListener("click", async () => {
-    simulateLoading()
-	await sleep(4000)
-	const videoDiv = document.getElementById("generated-video")
-	const video = videoDiv.querySelector("video")
-	video.src = "sample.mp4"
-	video.play()
-	stopLoading()
-});
+document
+	.getElementById("generate-button")
+	.addEventListener("click", async () => {
+		simulateLoading()
+		await sleep(4000)
+		const videoDiv = document.getElementById("generated-video")
+		const video = videoDiv.querySelector("video")
+		document.querySelector(".videoTitle").innerHTML =
+			"Mickey's Messy Mayhem"
+		document.querySelector(".videoDescription").innerHTML =
+			"Mickey Mouse, Minnie Mouse, and Donald Duck are getting ready for a big clubhouse party, but there's a problem - Mickey's house is a chaotic mess! As they search for party decorations, they stumble upon forgotten toys, misplaced gadgets, and a tangle of wires. Realizing they can't have a party in such disarray, the three friends decide to work together to clean up the mess. Through teamwork and laughter, they tidy up the house, discovering the joy of organizing and the benefits of keeping their home clean. With the house sparkling and the party a success, Mickey and his friends learn that a clean home makes for a happier, more enjoyable time with friends."
+		video.src = "sample.mp4"
+		stopLoading()
+		if (window.innerWidth > 768) {
+			window.scrollTo(0, document.body.scrollHeight, "smooth")
+		}
+	})
 
 async function sleep(timeInMilliSeconds) {
-	return new Promise(resolve => setTimeout(resolve, timeInMilliSeconds));
+	return new Promise((resolve) => setTimeout(resolve, timeInMilliSeconds))
 }
