@@ -1,4 +1,42 @@
 const VIDEO_API_ENDPOINT = "https://maya-mongo-api.adaptable.app/crud"
+const VIDEO_GENERATION_ENDPOINT = "http://localhost:5000"
+
+async function generateVideo(currentStyle, prompt) {
+	let styles = {
+		"mickey-mouse": "Mickey Mouse",
+		spongebob: "SpongeBob",
+	}
+
+	let request = await fetch(`${VIDEO_GENERATION_ENDPOINT}/generate`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			title: styles[currentStyle],
+			story: prompt,
+		}),
+	})
+
+	let response = await request.json()
+
+	let videoId = response.uuid
+	let title = response.title
+	let description = response.description
+
+	let videoURL = `${VIDEO_GENERATION_ENDPOINT}/files/${videoId}.mp4`
+	let thumbnailURL = `${VIDEO_GENERATION_ENDPOINT}/files/${videoId}_0.png`
+
+	console.log({videoURL, thumbnailURL, title, description})
+
+	return {
+		videoURL,
+		thumbnailURL,
+		title,
+		description
+	}
+
+}
 
 // Global variable to store the selected cartoon style
 let currentStyle = "mickey-mouse"
@@ -64,11 +102,18 @@ document
 	.getElementById("generate-button")
 	.addEventListener("click", async () => {
 		simulateLoading()
-		await sleep(5000)
+		
+		const prompt = document.getElementById("user-prompt").value
+		const { videoURL, thumbnailURL, title, description } = await generateVideo(currentStyle, prompt)
+
 		const videoDiv = document.getElementById("generated-video")
 		const video = videoDiv.querySelector("video")
-		video.src = "sample.mp4"
-		video.play()
+
+		video.src = videoURL
+		video.poster = thumbnailURL
+		video.load()
+
+		setTitleAndDescription(title, description)
 		stopLoading()
 	})
 
@@ -76,13 +121,19 @@ async function sleep(timeInMilliSeconds) {
 	return new Promise((resolve) => setTimeout(resolve, timeInMilliSeconds))
 }
 
+
+function setTitleAndDescription(title, description) {
+	document.querySelector(".videoTitle").innerHTML = title
+	document.querySelector(".videoDescription").innerHTML = description
+}
+
 function constructThumbnail(asset) {
 	let thumbnail = document.createElement("div")
 	thumbnail.classList.add("thumbnail")
 
 	let img = document.createElement("img")
-	img.src = asset.thumbnail
-	img.alt = "Video Thumbnail"
+	img.src = `${VIDEO_GENERATION_ENDPOINT}/files/${asset.uuid}_0.png`
+	img.alt = asset.episodeTitle
 	thumbnail.appendChild(img)
 
 	let thumbnailContent = document.createElement("div")
@@ -95,7 +146,7 @@ function constructThumbnail(asset) {
 
 	let thumbnailContentDuration = document.createElement("span")
 	thumbnailContentDuration.classList.add("thumbnail-content-duration")
-	thumbnailContentDuration.innerHTML = asset.duration
+	thumbnailContentDuration.innerHTML = asset.duration + "s"
 	thumbnailContent.appendChild(thumbnailContentDuration)
 
 	thumbnail.appendChild(thumbnailContent)
@@ -116,7 +167,6 @@ function constructThumbnails(assets) {
 }
 
 setTimeout(async () => {
-
 	let response = await fetch(`${VIDEO_API_ENDPOINT}/all`)
 	let assets = await response.json()
 
@@ -124,4 +174,12 @@ setTimeout(async () => {
 	let rightColumn = document.getElementById("right-column")
 	rightColumn.removeChild(rightColumn.querySelector(".loader"))
 	rightColumn.appendChild(thumbnails)
+})
+
+document.addEventListener("click:", (event) => {
+	// if it came from a thumbnail, title, duration, or description or thumbnail image or its children do something
+	if (event.target.classList.contains("thumbnail") || event.target.classList.contains("thumbnail-content") || event.target.classList.contains("thumbnail-content-title") || event.target.classList.contains("thumbnail-content-duration") || event.target.classList == "thumbnail-content" || event.target.classList == "thumbnail-content-title" || event.target.classList == "thumbnail-content-duration" || event.target.classList == "thumbnail-content" || event.target.classList == "thumbnail-content-title" || event.target.classList == "thumbnail-content-duration" || event.target.classList == "thumbnail-content" || event.target.classList == "thumbnail-content-title" || event.target.classList == "thumbnail-content-duration" || event.target.classList == "thumbnail-content" || event.target.classList == "thumbnail-content-title" || event.target.classList == "thumbnail-content-duration") {
+		let videoURL = event.target.querySelector("img").src.replace("_0.png", ".mp4")
+		window.open(videoURL, "_blank")
+	}
 })
