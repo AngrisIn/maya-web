@@ -1,7 +1,6 @@
 // Global variable to store the selected cartoon style
 let currentStyle = "mickey-mouse"
 
-// Function to handle button selection
 function selectCartoonStyle(style) {
 	const buttons = document.querySelectorAll(".cartoon-style-button")
 	buttons.forEach((button) => {
