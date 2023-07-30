@@ -1,5 +1,5 @@
 const VIDEO_API_ENDPOINT = "https://maya-mongo-api.adaptable.app/crud"
-const VIDEO_GENERATION_ENDPOINT = "http://localhost:5000"
+const VIDEO_GENERATION_ENDPOINT = "http://localhost:5003"
 
 async function generateVideo(currentStyle, prompt) {
 	let styles = {
@@ -24,24 +24,23 @@ async function generateVideo(currentStyle, prompt) {
 	let title = response.title
 	let description = response.description
 
-	let videoURL = `${VIDEO_GENERATION_ENDPOINT}/files/${videoId}.mp4`
-	let thumbnailURL = `${VIDEO_GENERATION_ENDPOINT}/files/${videoId}_0.png`
+	let videoURL = `${VIDEO_GENERATION_ENDPOINT}/${videoId}.mp4`
+	let thumbnailURL = `${VIDEO_GENERATION_ENDPOINT}/${videoId}_0.png`
 
-	console.log({videoURL, thumbnailURL, title, description})
+	console.log({ videoURL, thumbnailURL, title, description })
+
+	fetch(`${VIDEO_GENERATION_ENDPOINT}/delete/${videoId}`)
 
 	return {
 		videoURL,
 		thumbnailURL,
 		title,
-		description
+		description,
 	}
-
 }
 
-// Global variable to store the selected cartoon style
 let currentStyle = "mickey-mouse"
 
-// Function to handle button selection
 function selectCartoonStyle(style) {
 	const buttons = document.querySelectorAll(".cartoon-style-button")
 	buttons.forEach((button) => {
