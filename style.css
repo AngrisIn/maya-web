@@ -25,7 +25,7 @@ main {
 	flex-direction: row;
 	justify-content: center;
 	padding: 20px;
-	max-width: 1000px;
+	max-width: 900px;
 	margin: 0 auto;
 }
 
@@ -294,6 +294,23 @@ label {
     cursor: not-allowed;
     opacity: 0.7;
     pointer-events: none;
+}
+
+.videoTitle {
+	font-size: 20px;
+	font-weight: bold;
+	margin: 0;
+	color: #ffffff;
+	display: block;
+	margin-top: 12px;
+}
+
+.videoDescription {
+	font-size: 16px;
+	margin: 0;
+	color: #ffffffa3;
+	display: block;
+	margin-top: 12px;
 }
 
 @media screen and (max-width: 480px) {
